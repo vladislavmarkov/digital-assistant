@@ -10,8 +10,8 @@ include(formatting)
 message(STATUS "current module path ${CMAKE_MODULE_PATH}")
 
 find_package(Freetype REQUIRED)
-find_package(OpenGL REQUIRED)
-pkg_check_modules(SDL2 sdl2>=2.0.5 REQUIRED)
+find_package(OpenGL 3 REQUIRED)
+find_package(SDL2 REQUIRED)
 
 set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/digitalassistant.cpp
