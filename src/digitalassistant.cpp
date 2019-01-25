@@ -1,5 +1,7 @@
 #include <cstdio>
 #include <iostream>
+#include <stdexcept>
+#include <string>
 
 #include <GL/gl3w.h>
 #include <SDL.h>
@@ -22,7 +24,8 @@ sdl2_init()
 {
     // Setup SDL
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0) {
-        throw std::runtime_error("failed to initialize SDL2"s + SDL_GetError());
+        throw std::runtime_error(
+            "failed to initialize SDL2 "s + SDL_GetError());
     }
 }
 
@@ -69,8 +72,7 @@ sdl2_setup()
 } // namespace
 
 int
-main(int /* unused */, char** /* unused */)
-{
+main(int /* unused */, char** /* unused */) try {
     sdl2_init();
     auto sdl2_finally = gsl::finally([]() { sdl2_deinit(); });
 
@@ -93,8 +95,7 @@ main(int /* unused */, char** /* unused */)
     SDL_GL_SetSwapInterval(1); // Enable vsync
 
     if (gl3wInit() != 0) {
-        fprintf(stderr, "Failed to initialize OpenGL loader!\n");
-        return 1;
+        throw std::runtime_error("Failed to initialize OpenGL loader!");
     }
 
     // Setup Dear ImGui context
@@ -219,5 +220,8 @@ main(int /* unused */, char** /* unused */)
         SDL_GL_SwapWindow(window);
     }
 
-    return 0;
+    return EXIT_SUCCESS;
+} catch (const std::exception& e) {
+    std::cerr << e.what() << '\n';
+    return EXIT_FAILURE;
 }
