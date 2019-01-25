@@ -4,6 +4,7 @@ project(digital-assistant)
 
 include(FindPkgConfig)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+include(clone-GSL)
 include(clone-imgui)
 include(formatting)
 
@@ -12,6 +13,9 @@ message(STATUS "current module path ${CMAKE_MODULE_PATH}")
 find_package(Freetype REQUIRED)
 find_package(OpenGL 3 REQUIRED)
 find_package(SDL2 REQUIRED)
+
+get_property(_subprojects GLOBAL PROPERTY AS_SUBPROJECT)
+message(STATUS "subprojects ${_subprojects}")
 
 set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/digitalassistant.cpp
@@ -67,5 +71,6 @@ PRIVATE
 
 target_link_libraries(digitalassistant
 PRIVATE
+    GSL
     imgui
     ${SDL2_LIBRARIES})
